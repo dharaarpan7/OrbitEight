@@ -1,0 +1,193 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* "Event Horizon" tokens — brand_design_guideline.md §1 */
+:root {
+  /* shadcn semantic variables, mapped to the Event Horizon palette */
+  --background: 0 0% 0%;
+  --foreground: 0 0% 100%;
+  --primary: 0 0% 100%;
+  --primary-foreground: 0 0% 0%;
+  --secondary: 0 0% 60%;
+  --card: 0 0% 4%;
+  --card-foreground: 0 0% 100%;
+  --muted: 0 0% 10%;
+  --muted-foreground: 0 0% 60%;
+  --border: 0 0% 16%;
+  --ring: 37 91% 55%;
+
+  --color-bg-primary: #000000;
+  --color-bg-surface: #0a0a0a;
+  --color-bg-elevated: #1a1a1a;
+
+  --color-text-primary: #ffffff;
+  --color-text-secondary: #999999;
+  --color-text-tertiary: #666666;
+
+  --color-accent-bright: #f5a623;
+  --color-accent-warm: #d4891a;
+  --color-accent-mid: #a86214;
+  --color-accent-deep: #7a4510;
+  --color-accent-shadow: #3d220a;
+
+  --color-border-subtle: #2a2a2a;
+  --color-border-accent: rgba(245, 166, 35, 0.3);
+
+  --gradient-accretion: linear-gradient(
+    90deg,
+    #3d220a,
+    #7a4510,
+    #a86214,
+    #d4891a,
+    #f5a623
+  );
+  --gradient-glow: radial-gradient(
+    ellipse,
+    rgba(245, 166, 35, 0.15),
+    transparent 70%
+  );
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-void font-body text-secondary antialiased;
+  }
+
+  ::selection {
+    background: rgba(245, 166, 35, 0.25);
+    color: #ffffff;
+  }
+
+  /* Visible focus states — websitePrompt.md accessibility */
+  :focus-visible {
+    outline: 2px solid rgba(245, 166, 35, 0.6);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@layer components {
+  /* Primary CTA — brand_design_guideline.md §3 */
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-full bg-primary px-6 py-3 text-[0.9375rem] font-medium text-void transition-all duration-300;
+  }
+  .btn-primary:hover {
+    box-shadow: 0 0 24px rgba(245, 166, 35, 0.3);
+    transform: scale(1.03);
+  }
+
+  /* Secondary / ghost CTA */
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 rounded-full border border-white/40 bg-transparent px-6 py-3 text-[0.9375rem] font-medium text-white transition-all duration-300;
+  }
+  .btn-secondary:hover {
+    border-color: rgba(255, 255, 255, 0.8);
+    background: rgba(255, 255, 255, 0.05);
+  }
+
+  /* Ghost CTA — transparent by default, warms on hover. For the navbar,
+     where a solid solar-flare button is too heavy against the cinematic
+     opening of every page. */
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 rounded-full border border-white/25 bg-transparent px-6 py-3 text-[0.9375rem] font-medium text-white transition-all duration-300;
+  }
+  .btn-ghost:hover {
+    border-color: rgba(245, 166, 35, 0.6);
+    background: rgba(245, 166, 35, 0.08);
+    box-shadow: 0 0 20px rgba(245, 166, 35, 0.15);
+  }
+
+  /* Quiet eyebrow label above section headers */
+  .eyebrow {
+    @apply text-[0.8125rem] font-medium uppercase tracking-[0.2em] text-solar-flare/80;
+  }
+}
+
+@layer utilities {
+  /* Scroll reveal — applied by <Reveal> component; inert until JS runs */
+  .reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition:
+      opacity 0.8s ease-out,
+      transform 0.8s ease-out;
+  }
+  .reveal[data-visible="true"] {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .reveal {
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
+  }
+}
+
+/* Hero entrance keyframes — supplied with the locked animated-shader-hero
+   component (its <style jsx> block, moved here for App Router). */
+@keyframes fade-in-down {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-down {
+  animation: fade-in-down 0.8s ease-out forwards;
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.8s ease-out forwards;
+  opacity: 0;
+}
+
+.animation-delay-200 {
+  animation-delay: 0.2s;
+}
+
+.animation-delay-400 {
+  animation-delay: 0.4s;
+}
+
+.animation-delay-600 {
+  animation-delay: 0.6s;
+}
+
+.animation-delay-800 {
+  animation-delay: 0.8s;
+}

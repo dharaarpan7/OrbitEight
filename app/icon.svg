@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- Orbit Eight tab icon: a black void disc, one solar-flare orbit,
+       and the satellite at its upper-right. -->
+  <rect width="64" height="64" rx="14" fill="#000000"/>
+  <circle cx="32" cy="32" r="13" fill="#F5A623"/>
+  <ellipse cx="32" cy="32" rx="24" ry="10" fill="none" stroke="#F5A623" stroke-width="2.5" transform="rotate(-24 32 32)"/>
+  <circle cx="50" cy="21" r="4" fill="#F5A623"/>
+</svg>

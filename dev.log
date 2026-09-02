@@ -1,0 +1,24 @@
+npm notice run orbit-eight@0.1.0 npx
+npm notice run next dev
+ ⚠ Port 3000 is in use by an unknown process, using available port 3001 instead.
+   ▲ Next.js 15.5.25
+   - Local:        http://localhost:3001
+   - Network:      http://10.2.0.2:3001
+
+ ✓ Starting...
+ ✓ Ready in 7.2s
+ ○ Compiling /contact ...
+ ✓ Compiled /contact in 24.5s (695 modules)
+ GET /contact 200 in 28734ms
+ ○ Compiling /icon.svg ...
+ ✓ Compiled /icon.svg in 4.6s (434 modules)
+ GET /icon.svg?ffaa77fa2f535ecc 200 in 5725ms
+ GET /contact 200 in 3260ms
+ ○ Compiling / ...
+ ✓ Compiled / in 5.3s (732 modules)
+ GET /contact 200 in 2861ms
+ GET / 200 in 9333ms
+ GET /contact 200 in 1551ms
+ GET / 200 in 2033ms
+ GET /icon.svg 200 in 240ms
+[?25h
