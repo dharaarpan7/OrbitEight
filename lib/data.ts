@@ -166,7 +166,7 @@ export const discoveries: Discovery[] = [
     summary:
       "A reprocessed Europa Clipper pass reveals sodium chloride along a dilated ridge — a hint that its ice shell communicates with the ocean below.",
     readingTime: 6,
-    image: "/images/discoveries/europa.svg",
+    image: "/images/discoveries/europa-640.webp",
   },
   {
     slug: "gravitational-wave-background",

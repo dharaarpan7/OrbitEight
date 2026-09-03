@@ -36,7 +36,7 @@ const TOPIC_PHOTOS = [
 
 const DISCOVERIES_DIR = join(process.cwd(), "public", "images", "discoveries");
 
-// Sources may be webp or png (the Gemini render) — every output is webp.
+// Sources may be webp, png, or jpg — every output is webp.
 const DISCOVERY_PHOTOS = [
   "fast-radio-burst.webp",
   "early-galaxies.webp",
@@ -44,6 +44,7 @@ const DISCOVERY_PHOTOS = [
   "interstellar.webp",
   "venus.webp",
   "gw-background.png",
+  "europa.jpg",
 ];
 
 async function optimize(dir, photos) {
