@@ -8,10 +8,10 @@ import { SplineBackground } from "./spline-background";
  * lazy-loads the scene client-side (never blocking first paint) and fades
  * it in once the runtime reports the scene is ready.
  */
-vi.mock("@splinetool/react-spline", async () => {
+vi.mock("./spline-canvas", async () => {
   const { useEffect } = await import("react");
   return {
-    default: ({
+    SplineCanvas: ({
       scene,
       onLoad,
     }: {
@@ -21,7 +21,7 @@ vi.mock("@splinetool/react-spline", async () => {
       useEffect(() => {
         onLoad?.();
       });
-      return <div data-testid="spline-scene" data-scene={scene} />;
+      return <canvas data-testid="spline-scene" data-scene={scene} />;
     },
   };
 });
