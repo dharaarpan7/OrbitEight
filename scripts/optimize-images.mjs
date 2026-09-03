@@ -1,6 +1,6 @@
 /**
- * One-off image optimizer — generates resized WebP variants of the four
- * photographed topics so the site never ships the ~780 KB originals.
+ * One-off image optimizer — generates resized WebP variants of the
+ * photographed topics so the site never ships the originals.
  *
  *   node scripts/optimize-images.mjs
  *
@@ -20,6 +20,14 @@ const PHOTOS = [
   "astrophysics.webp",
   "cosmology.webp",
   "solar-system.webp",
+  "planets.webp",
+  "exoplanets.webp",
+  "stars.webp",
+  "galaxies.webp",
+  "black-holes.webp",
+  "neutron-stars.webp",
+  "astrophotography.webp",
+  "space-exploration.webp",
 ];
 
 const WIDTHS = [640, 1920];

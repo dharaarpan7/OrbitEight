@@ -4,28 +4,27 @@ import { TopicCard } from "./topic-card";
 import { topics } from "@/lib/data";
 
 /**
- * Journey (home "Explore the cosmos") — the topic card renders the topic's
- * image in the right element for its format (SVG illustration vs webp
- * photograph) and routes to its Explore anchor.
+ * Journey (home "Explore the cosmos") — every topic card ships the topic's
+ * optimized 640px photograph (all twelve topics are webp images now; the
+ * SVG-placeholder branch of EditorialImage no longer applies to topics) and
+ * routes to its Explore anchor.
  */
 describe("TopicCard", () => {
-  it("renders an SVG topic through the object element", () => {
-    const planets = topics.find((t) => t.slug === "planets")!;
-    const { container } = render(<TopicCard topic={planets} />);
+  it("renders every topic as an optimized webp photograph", () => {
+    for (const topic of topics) {
+      const { container, unmount } = render(<TopicCard topic={topic} />);
 
-    const object = container.querySelector('object[type="image/svg+xml"]');
-    expect(object).not.toBeNull();
-    expect(object).toHaveAttribute("data", planets.image);
-  });
+      const img = container.querySelector("img");
+      expect(img, topic.slug).not.toBeNull();
+      expect(img).toHaveAttribute("src", topic.image);
+      expect(topic.image, topic.slug).toMatch(/-640\.webp$/);
+      // No topic is an SVG illustration anymore — no <object> fallback path.
+      expect(
+        container.querySelector('object[type="image/svg+xml"]'),
+      ).toBeNull();
 
-  it("renders a photographed topic as an img with its optimized src", () => {
-    const astronomy = topics.find((t) => t.slug === "astronomy")!;
-    const { container } = render(<TopicCard topic={astronomy} />);
-
-    const img = container.querySelector("img");
-    expect(img).not.toBeNull();
-    expect(img).toHaveAttribute("src", astronomy.image);
-    expect(astronomy.image).toMatch(/-640\.webp$/);
+      unmount();
+    }
   });
 
   it("links to the topic's Explore anchor with its title", () => {

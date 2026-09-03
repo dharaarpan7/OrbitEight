@@ -71,56 +71,56 @@ export const topics: Topic[] = [
     title: "Planets",
     description:
       "Worlds enough to lose count of. How they form, migrate, and sometimes collide.",
-    image: "/images/topics/planets.svg",
+    image: "/images/topics/planets-640.webp",
   },
   {
     slug: "exoplanets",
     title: "Exoplanets",
     description:
       "Every star a possible sun. Five thousand known worlds and a method for finding the rest.",
-    image: "/images/topics/exoplanets.svg",
+    image: "/images/topics/exoplanets-640.webp",
   },
   {
     slug: "stars",
     title: "Stars",
     description:
       "Furnaces with lifetimes. Born in collapse, sustained by fusion, ending in fire or silence.",
-    image: "/images/topics/stars.svg",
+    image: "/images/topics/stars-640.webp",
   },
   {
     slug: "galaxies",
     title: "Galaxies",
     description:
       "Islands of stars bound by dark matter, a hundred billion of them, drifting apart.",
-    image: "/images/topics/galaxies.svg",
+    image: "/images/topics/galaxies-640.webp",
   },
   {
     slug: "black-holes",
     title: "Black holes",
     description:
       "Where geometry wins. Regions of spacetime that bend light, swallow gas, and slow time.",
-    image: "/images/topics/black-holes.svg",
+    image: "/images/topics/black-holes-640.webp",
   },
   {
     slug: "neutron-stars",
     title: "Neutron stars",
     description:
       "A city-sized remnant spinning hundreds of times a second, with a magnetic field to match.",
-    image: "/images/topics/neutron-stars.svg",
+    image: "/images/topics/neutron-stars-640.webp",
   },
   {
     slug: "astrophotography",
     title: "Astrophotography",
     description:
       "The craft of collecting photons that left their stars before photography was invented.",
-    image: "/images/topics/astrophotography.svg",
+    image: "/images/topics/astrophotography-640.webp",
   },
   {
     slug: "space-exploration",
     title: "Space exploration",
     description:
       "Machines we send ahead of us — orbiters, landers, telescopes, and the occasional human.",
-    image: "/images/topics/space-exploration.svg",
+    image: "/images/topics/space-exploration-640.webp",
   },
 ];
 

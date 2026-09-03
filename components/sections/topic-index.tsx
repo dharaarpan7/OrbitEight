@@ -56,8 +56,8 @@ export function TopicIndex() {
                   href="/discoveries"
                   className="group flex items-center gap-6 py-7 transition-colors md:gap-10"
                 >
-                  {/* Topic thumbnail — the photographed subjects show their
-                      photos; the rest keep their SVG illustrations. */}
+                  {/* Topic thumbnail — every subject ships a photographed
+                      640px webp now (see scripts/optimize-images.mjs). */}
                   <img
                     src={topic.image}
                     alt=""
