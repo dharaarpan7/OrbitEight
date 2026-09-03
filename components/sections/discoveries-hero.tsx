@@ -3,35 +3,28 @@ import { Reveal } from "@/components/ui/reveal";
 
 /**
  * Discoveries page hero — same cinematic language as the Explore hero but
- * mirrored: the type sits right, the warm glow rises from the lower left.
- * One page opens left-to-right, the other right-to-left, so the pair reads
- * as chapters of one book rather than clones.
+ * mirrored: the type sits right, the warm glow rises from the lower left,
+ * and the nebula glare photo backs the type where Explore carries the star
+ * funnel. One page opens left-to-right, the other right-to-left, so the
+ * pair reads as chapters of one book rather than clones.
  */
 export function DiscoveriesHero() {
   return (
     <section className="relative overflow-hidden bg-void">
-      {/* Deep-space backdrop: warm light low and left, a cold breath low and
-          right, stars scattered above the horizon. */}
+      {/* Photographic backdrop — the nebula glare, dimmed so the type carries. */}
+      <img
+        src="/images/heroes/discoveries-hero-1920.webp"
+        alt=""
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-40"
+      />
+      {/* Warm light low and left, a cold breath low and right. */}
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-0"
         style={{
           background:
             "radial-gradient(ellipse 45% 32% at 24% 88%, rgba(245, 166, 35, 0.10), transparent 70%), radial-gradient(ellipse 40% 30% at 80% 92%, rgba(168, 98, 20, 0.06), transparent 70%)",
-        }}
-      />
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 opacity-60"
-        style={{
-          backgroundImage:
-            "radial-gradient(1.2px 1.2px at 8% 30%, rgba(255,255,255,0.6) 50%, transparent 51%)," +
-            "radial-gradient(1px 1px at 22% 15%, rgba(255,243,222,0.5) 50%, transparent 51%)," +
-            "radial-gradient(1.4px 1.4px at 36% 26%, rgba(255,255,255,0.75) 50%, transparent 51%)," +
-            "radial-gradient(1px 1px at 56% 38%, rgba(255,255,255,0.5) 50%, transparent 51%)," +
-            "radial-gradient(1.2px 1.2px at 70% 20%, rgba(255,243,222,0.65) 50%, transparent 51%)," +
-            "radial-gradient(1px 1px at 85% 34%, rgba(255,255,255,0.55) 50%, transparent 51%)," +
-            "radial-gradient(1.3px 1.3px at 95% 15%, rgba(255,255,255,0.6) 50%, transparent 51%)",
         }}
       />
       {/* Corner darkening so the type carries. */}

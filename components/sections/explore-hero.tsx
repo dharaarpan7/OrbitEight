@@ -2,36 +2,29 @@ import { ChevronDown } from "lucide-react";
 import { Reveal } from "@/components/ui/reveal";
 
 /**
- * Explore page hero — the redesigned cinematic opening. Deep-space is built
- * from layered CSS only (radial glows, a faint starfield, vignette): the
- * site keeps exactly one WebGL canvas — the About page's black hole — so
- * this page scrolls without fighting a raymarcher for the GPU.
+ * Explore page hero — the redesigned cinematic opening. The star funnel
+ * photo (stars spiraling down — "begin the descent") backs the type,
+ * dimmed under the same layered CSS glows and vignette. The CSS-only
+ * starfield scatter retired when the photo arrived; the site still keeps
+ * exactly one WebGL canvas — the About page's black hole.
  */
 export function ExploreHero() {
   return (
     <section className="relative overflow-hidden bg-void">
-      {/* Deep-space backdrop: a breath of warm light low and right, a cold
-          breath low and left, then a scatter of stars above the horizon. */}
+      {/* Photographic backdrop — the star funnel, dimmed so the type carries. */}
+      <img
+        src="/images/heroes/explore-hero-1920.webp"
+        alt=""
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-40"
+      />
+      {/* A breath of warm light low and right, a cold breath low and left. */}
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-0"
         style={{
           background:
             "radial-gradient(ellipse 45% 32% at 72% 88%, rgba(245, 166, 35, 0.10), transparent 70%), radial-gradient(ellipse 40% 30% at 18% 92%, rgba(168, 98, 20, 0.06), transparent 70%)",
-        }}
-      />
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 opacity-60"
-        style={{
-          backgroundImage:
-            "radial-gradient(1.2px 1.2px at 12% 34%, rgba(255,255,255,0.7) 50%, transparent 51%)," +
-            "radial-gradient(1px 1px at 28% 22%, rgba(255,255,255,0.5) 50%, transparent 51%)," +
-            "radial-gradient(1.4px 1.4px at 44% 41%, rgba(255,243,222,0.8) 50%, transparent 51%)," +
-            "radial-gradient(1px 1px at 61% 18%, rgba(255,255,255,0.55) 50%, transparent 51%)," +
-            "radial-gradient(1.2px 1.2px at 74% 36%, rgba(255,255,255,0.65) 50%, transparent 51%)," +
-            "radial-gradient(1px 1px at 88% 27%, rgba(255,243,222,0.5) 50%, transparent 51%)," +
-            "radial-gradient(1.3px 1.3px at 94% 48%, rgba(255,255,255,0.6) 50%, transparent 51%)",
         }}
       />
       {/* Corner darkening so the type carries. */}

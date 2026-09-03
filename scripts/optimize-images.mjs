@@ -47,12 +47,17 @@ const DISCOVERY_PHOTOS = [
   "europa.jpg",
 ];
 
-async function optimize(dir, photos) {
+const HEROES_DIR = join(process.cwd(), "public", "images", "heroes");
+
+// Full-bleed hero backdrops — only the 1920 variant is served.
+const HERO_PHOTOS = ["discoveries-hero.jpg", "explore-hero.jpg"];
+
+async function optimize(dir, photos, widths = WIDTHS) {
   for (const photo of photos) {
     const src = join(dir, photo);
     const name = basename(photo, extname(photo));
 
-    for (const width of WIDTHS) {
+    for (const width of widths) {
       const out = join(dir, `${name}-${width}.webp`);
       const info = await sharp(src)
         .resize({ width, withoutEnlargement: true })
@@ -67,3 +72,4 @@ async function optimize(dir, photos) {
 
 await optimize(TOPICS_DIR, TOPIC_PHOTOS);
 await optimize(DISCOVERIES_DIR, DISCOVERY_PHOTOS);
+await optimize(HEROES_DIR, HERO_PHOTOS, [1920]);
