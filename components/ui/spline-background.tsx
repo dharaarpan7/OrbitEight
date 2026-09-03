@@ -12,10 +12,11 @@ import dynamic from "next/dynamic";
  * The scene is self-hosted under /spline/ rather than fetched from
  * prod.spline.design (skill CORS/reliability recommendation).
  *
- * SplineCanvas (not react-spline) renders the scene: it forces the
- * runtime's WebGL backend via the public `renderer: "webgl"` option,
- * avoiding the WebGPU ShadowDepthTexture validation error. See
- * spline-canvas.tsx for the full rationale.
+ * SplineCanvas (not react-spline) renders the scene: react-spline exposes no
+ * renderer option and no way to bind events globally, both of which this scene
+ * needs — it only draws on the runtime's webgpu node-material pipeline, and
+ * because this wrapper is pointer-events-none its cursor-driven rig has to
+ * listen on the document. See spline-canvas.tsx for the full rationale.
  */
 const SplineCanvas = dynamic(() => import("./spline-canvas"), {
   ssr: false,
