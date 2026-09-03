@@ -156,7 +156,7 @@ export const discoveries: Discovery[] = [
     summary:
       "A repeater in a nearby galaxy fires on a predictable 22-day cycle. Whatever makes these bursts, this one keeps time.",
     readingTime: 5,
-    image: "/images/discoveries/frb.svg",
+    image: "/images/discoveries/fast-radio-burst-640.webp",
   },
   {
     slug: "europa-ridge-salt",

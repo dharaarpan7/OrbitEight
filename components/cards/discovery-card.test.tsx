@@ -21,6 +21,12 @@ const dated: Discovery = {
 
 const undated: Discovery = { ...dated, slug: "undated-entry", date: "" };
 
+const photographed: Discovery = {
+  ...dated,
+  slug: "fast-radio-burst-repeat",
+  image: "/images/discoveries/fast-radio-burst-640.webp",
+};
+
 describe("DiscoveryCard", () => {
   it("renders the formatted date for a dated discovery", () => {
     render(<DiscoveryCard discovery={dated} />);
@@ -43,5 +49,32 @@ describe("DiscoveryCard", () => {
     expect(
       screen.getByRole("link", { name: /Read discovery/ })
     ).toHaveAttribute("href", "/discoveries#early-galaxies");
+  });
+
+  it("stays text-only by default so home preview rows stay compact", () => {
+    const { container } = render(<DiscoveryCard discovery={photographed} />);
+
+    expect(container.querySelector("img")).toBeNull();
+    expect(container.querySelector("object")).toBeNull();
+  });
+
+  it("renders the photograph when the timeline asks for an image", () => {
+    const { container } = render(
+      <DiscoveryCard discovery={photographed} withImage />
+    );
+
+    const img = container.querySelector("img");
+    expect(img).not.toBeNull();
+    expect(img).toHaveAttribute("src", photographed.image);
+    // Photographs take the <img> path — no SVG <object> fallback.
+    expect(container.querySelector("object")).toBeNull();
+  });
+
+  it("renders an SVG illustration through the object element when asked", () => {
+    const { container } = render(<DiscoveryCard discovery={dated} withImage />);
+
+    const object = container.querySelector('object[type="image/svg+xml"]');
+    expect(object).not.toBeNull();
+    expect(object).toHaveAttribute("data", dated.image);
   });
 });

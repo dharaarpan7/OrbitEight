@@ -75,7 +75,7 @@ export default function DiscoveriesPage() {
                         : "left-0 md:-left-1"
                     }`}
                   />
-                  <DiscoveryCard discovery={discovery} />
+                  <DiscoveryCard discovery={discovery} withImage />
                 </div>
               </Reveal>
             ))}
