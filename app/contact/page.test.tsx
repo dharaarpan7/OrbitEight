@@ -12,22 +12,21 @@ import { pageMeta } from "@/lib/site";
  * prod.spline.design. No photographic layer — the scene is the only
  * backdrop, so nothing overlaps it. SEO metadata is unchanged.
  */
-vi.mock("@splinetool/react-spline", async () => {
+vi.mock("@/components/ui/spline-canvas", async () => {
   const { useEffect } = await import("react");
-  return {
-    default: ({
-      scene,
-      onLoad,
-    }: {
-      scene: string;
-      onLoad?: () => void;
-    }) => {
-      useEffect(() => {
-        onLoad?.();
-      });
-      return <div data-testid="spline-scene" data-scene={scene} />;
-    },
+  const SplineCanvas = ({
+    scene,
+    onLoad,
+  }: {
+    scene: string;
+    onLoad?: () => void;
+  }) => {
+    useEffect(() => {
+      onLoad?.();
+    });
+    return <canvas data-testid="spline-scene" data-scene={scene} />;
   };
+  return { default: SplineCanvas, SplineCanvas };
 });
 
 describe("Contact page", () => {

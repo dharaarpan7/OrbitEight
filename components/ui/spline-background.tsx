@@ -11,8 +11,13 @@ import dynamic from "next/dynamic";
  * interactive, and the scene fades in once loaded instead of popping.
  * The scene is self-hosted under /spline/ rather than fetched from
  * prod.spline.design (skill CORS/reliability recommendation).
+ *
+ * SplineCanvas (not react-spline) renders the scene: it forces the
+ * runtime's WebGL backend via the public `renderer: "webgl"` option,
+ * avoiding the WebGPU ShadowDepthTexture validation error. See
+ * spline-canvas.tsx for the full rationale.
  */
-const Spline = dynamic(() => import("@splinetool/react-spline"), {
+const SplineCanvas = dynamic(() => import("./spline-canvas"), {
   ssr: false,
 });
 
@@ -31,7 +36,7 @@ export function SplineBackground({ scene }: { scene: string }) {
           loaded ? "opacity-100" : "opacity-0"
         }`}
       >
-        <Spline
+        <SplineCanvas
           scene={scene}
           onLoad={() => setLoaded(true)}
           className="h-full w-full"

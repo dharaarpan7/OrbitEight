@@ -10,20 +10,21 @@ import { SplineBackground } from "./spline-background";
  */
 vi.mock("./spline-canvas", async () => {
   const { useEffect } = await import("react");
-  return {
-    SplineCanvas: ({
-      scene,
-      onLoad,
-    }: {
-      scene: string;
-      onLoad?: () => void;
-    }) => {
-      useEffect(() => {
-        onLoad?.();
-      });
-      return <canvas data-testid="spline-scene" data-scene={scene} />;
-    },
+  const SplineCanvas = ({
+    scene,
+    onLoad,
+  }: {
+    scene: string;
+    onLoad?: () => void;
+  }) => {
+    useEffect(() => {
+      onLoad?.();
+    });
+    return <canvas data-testid="spline-scene" data-scene={scene} />;
   };
+  // spline-background lazy-loads this module via next/dynamic, which
+  // resolves the default export.
+  return { default: SplineCanvas, SplineCanvas };
 });
 
 describe("SplineBackground", () => {

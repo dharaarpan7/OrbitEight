@@ -14,18 +14,20 @@ import { SplineCanvas } from "./spline-canvas";
 
 const loadMock = vi.fn().mockResolvedValue(undefined);
 const disposeMock = vi.fn();
-const applicationMock = vi.fn().mockImplementation(() => ({
-  load: loadMock,
-  dispose: disposeMock,
-}));
+// A class-style mock: `new Application(...)` must work, so use an
+// constructable function rather than a plain object factory.
+const Application = vi.fn(function (this: any) {
+  this.load = loadMock;
+  this.dispose = disposeMock;
+});
 
 vi.mock("@splinetool/runtime", () => ({
-  Application: applicationMock,
+  Application: Application,
 }));
 
 describe("SplineCanvas", () => {
   beforeEach(() => {
-    applicationMock.mockClear();
+    Application.mockClear();
     loadMock.mockClear();
     disposeMock.mockClear();
   });
@@ -34,10 +36,13 @@ describe("SplineCanvas", () => {
     render(<SplineCanvas scene="/spline/contact-hero.splinecode" />);
 
     await waitFor(() => {
-      expect(applicationMock).toHaveBeenCalledTimes(1);
+      expect(Application).toHaveBeenCalledTimes(1);
     });
 
-    const [canvas, options] = applicationMock.mock.calls[0];
+    const [canvas, options] = Application.mock.calls[0] as unknown as [
+      HTMLCanvasElement,
+      { renderer?: string },
+    ];
     expect(canvas).toBeInstanceOf(HTMLCanvasElement);
     expect(options).toEqual(expect.objectContaining({ renderer: "webgl" }));
   });
@@ -81,7 +86,7 @@ describe("SplineCanvas", () => {
     );
 
     await waitFor(() => {
-      expect(applicationMock).toHaveBeenCalledTimes(1);
+      expect(Application).toHaveBeenCalledTimes(1);
     });
     unmount();
 
