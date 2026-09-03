@@ -16,7 +16,7 @@ const base: Discovery = {
   title: "A dated feature",
   summary: "Summary text.",
   readingTime: 6,
-  image: "/images/discoveries/early-galaxies.svg",
+  image: "/images/discoveries/europa.svg",
 };
 
 describe("FeaturedDiscovery", () => {
@@ -28,7 +28,7 @@ describe("FeaturedDiscovery", () => {
     // The <img> inside is the object's fallback and carries the same src.
     expect(object?.querySelector("img")).toHaveAttribute(
       "src",
-      "/images/discoveries/early-galaxies.svg"
+      "/images/discoveries/europa.svg"
     );
   });
 

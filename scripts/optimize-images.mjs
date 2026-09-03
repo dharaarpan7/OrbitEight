@@ -13,7 +13,7 @@
  * Idempotent: regenerates every variant on each run.
  */
 import sharp from "sharp";
-import { basename, join } from "node:path";
+import { basename, extname, join } from "node:path";
 
 const WIDTHS = [640, 1920];
 
@@ -36,12 +36,20 @@ const TOPIC_PHOTOS = [
 
 const DISCOVERIES_DIR = join(process.cwd(), "public", "images", "discoveries");
 
-const DISCOVERY_PHOTOS = ["fast-radio-burst.webp"];
+// Sources may be webp or png (the Gemini render) — every output is webp.
+const DISCOVERY_PHOTOS = [
+  "fast-radio-burst.webp",
+  "early-galaxies.webp",
+  "enceladus.webp",
+  "interstellar.webp",
+  "venus.webp",
+  "gw-background.png",
+];
 
 async function optimize(dir, photos) {
   for (const photo of photos) {
     const src = join(dir, photo);
-    const name = basename(photo, ".webp");
+    const name = basename(photo, extname(photo));
 
     for (const width of WIDTHS) {
       const out = join(dir, `${name}-${width}.webp`);

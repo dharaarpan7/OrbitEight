@@ -16,7 +16,7 @@ const dated: Discovery = {
   title: "The galaxies that arrived too early",
   summary: "JWST keeps finding galaxies that formed too soon.",
   readingTime: 6,
-  image: "/images/discoveries/early-galaxies.svg",
+  image: "/images/discoveries/europa.svg",
 };
 
 const undated: Discovery = { ...dated, slug: "undated-entry", date: "" };

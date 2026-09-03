@@ -134,7 +134,7 @@ export const featuredDiscovery: Discovery = {
   summary:
     "The first deep fields from Webb kept turning up galaxies that seemed too massive, too ordered, too soon after the Big Bang. New observations are starting to explain why — or change what we think the first hundred million years were like.",
   readingTime: 8,
-  image: "/images/discoveries/early-galaxies.svg",
+  image: "/images/discoveries/early-galaxies-1920.webp",
 };
 
 export const discoveries: Discovery[] = [
@@ -146,7 +146,7 @@ export const discoveries: Discovery[] = [
     summary:
       "Fresh analysis of the plume feeding Saturn's E ring finds complex organics and phosphates — the chemistry of habitability, sampled from orbit.",
     readingTime: 6,
-    image: "/images/discoveries/enceladus.svg",
+    image: "/images/discoveries/enceladus-640.webp",
   },
   {
     slug: "fast-radio-burst-repeat",
@@ -176,7 +176,7 @@ export const discoveries: Discovery[] = [
     summary:
       "Pulsar timing arrays now agree: spacetime carries a background ripple, most plausibly the chorus of orbiting supermassive black hole binaries.",
     readingTime: 7,
-    image: "/images/discoveries/gw-background.svg",
+    image: "/images/discoveries/gw-background-640.webp",
   },
   {
     slug: "interstellar-comet-3i",
@@ -186,7 +186,7 @@ export const discoveries: Discovery[] = [
     summary:
       "Only the third interstellar object ever recorded is inbound — faint, fast, and already being watched by every telescope that can see it.",
     readingTime: 4,
-    image: "/images/discoveries/interstellar.svg",
+    image: "/images/discoveries/interstellar-640.webp",
   },
   {
     slug: "venus-cloud-map",
@@ -196,7 +196,7 @@ export const discoveries: Discovery[] = [
     summary:
       "A year of infrared observation resolves the cloud deck's four-day dance in finer detail than any orbiter has managed in a decade.",
     readingTime: 5,
-    image: "/images/discoveries/venus.svg",
+    image: "/images/discoveries/venus-640.webp",
   },
 ];
 
