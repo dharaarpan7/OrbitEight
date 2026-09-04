@@ -81,6 +81,19 @@ describe("AgentShield finding 2: project settings carry a deny list", () => {
       deny.some((rule) => /pem|id_rsa|\.key/.test(rule)),
       "deny list must cover key/cert material"
     ).toBe(true);
+    // Destructive shell patterns flagged by AgentShield's second pass.
+    expect(
+      deny.some((rule) => rule.includes("rm -rf")),
+      "deny list must cover recursive force delete"
+    ).toBe(true);
+    expect(
+      deny.some((rule) => rule.includes("sudo")),
+      "deny list must cover privilege escalation"
+    ).toBe(true);
+    expect(
+      deny.some((rule) => rule.includes("chmod 777")),
+      "deny list must cover world-writable chmod"
+    ).toBe(true);
   });
 });
 

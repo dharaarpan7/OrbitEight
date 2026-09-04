@@ -27,7 +27,13 @@
       "Write(**/id_ed25519*)",
       "Write(**/*.pem)",
       "Write(**/*.key)",
-      "Write(**/.ssh/**)"
+      "Write(**/.ssh/**)",
+      "Bash(rm -rf *)",
+      "Bash(rm -fr *)",
+      "Bash(sudo *)",
+      "Bash(*sudo*)",
+      "Bash(chmod 777 *)",
+      "PowerShell(Remove-Item -Recurse -Force *)"
     ]
   },
   "hooks": {
