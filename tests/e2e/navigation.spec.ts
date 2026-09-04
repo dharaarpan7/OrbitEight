@@ -54,20 +54,30 @@ test("navbar links reach every top-level page and mark the active one", async ({
     "desktop navbar layout only"
   );
 
+  // This journey clicks through four WebGL-hero pages. Under headless
+  // software rasterization each page's main thread runs ~0.5–2s tasks
+  // (clicks have been observed landing only after 18–24s on this 4-core
+  // machine), so the whole journey needs generous room — the default
+  // 10s action / 60s test budgets flake purely on hardware speed.
+  test.setTimeout(240_000);
+
   await page.goto("/");
+  const nav = page.getByRole("navigation", { name: "Primary" });
   for (const [label, url] of [
     ["Explore", /\/explore/],
     ["Discoveries", /\/discoveries/],
     ["About", /\/about/],
     ["Contact", /\/contact/],
   ] as const) {
-    await page.getByRole("navigation", { name: "Primary" }).getByRole("link", { name: label }).first().click();
+    await nav
+      .getByRole("link", { name: label })
+      .first()
+      .click({ timeout: 45_000 });
     await expect(page).toHaveURL(url);
     // The active page's nav link carries aria-current="page". getByRole has
     // no option for it, so intersect the role/name match with the attribute.
     await expect(
-      page
-        .getByRole("navigation", { name: "Primary" })
+      nav
         .getByRole("link", { name: label })
         .and(page.locator('[aria-current="page"]'))
     ).toBeVisible();
