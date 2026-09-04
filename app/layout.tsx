@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter, Playfair_Display } from "next/font/google";
 import { Navbar } from "@/components/navigation/navbar";
 import { Footer } from "@/components/layout/footer";
+import { AmbientAudio } from "@/components/ui/ambient-audio";
 import { site } from "@/lib/site";
 import "./globals.css";
 
@@ -47,6 +48,9 @@ export default function RootLayout({
       >
         <Navbar />
         <main id="main">{children}</main>
+        {/* Ambience for the explore and about pages; the component gates
+            itself by route and pauses everywhere else. */}
+        <AmbientAudio />
         <Footer />
       </body>
     </html>
