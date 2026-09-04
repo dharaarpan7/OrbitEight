@@ -41,7 +41,7 @@ export function DiscoveriesHero() {
         <Reveal className="md:ml-auto md:max-w-2xl md:text-right">
           <p className="eyebrow">The record</p>
           <h1 className="mt-6 font-heading text-h1 font-light leading-[1.05] text-white">
-            Discover what's beyond.
+            Discover what’s beyond.
           </h1>
           <p className="mt-6 max-w-prose text-lg leading-relaxed text-secondary md:ml-auto">
             The universe is constantly revealing something new.

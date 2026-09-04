@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
@@ -17,6 +17,8 @@ export function Navbar() {
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const toggleRef = useRef<HTMLButtonElement>(null);
+  const menuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -25,16 +27,38 @@ export function Navbar() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // Close the mobile menu on navigation.
-  useEffect(() => {
+  // Close the menu on any navigation — the link taps below close it directly,
+  // and this covers browser back/forward, which changes the pathname without
+  // firing a click. Adjusting state during render (React's documented
+  // pattern) instead of in an effect avoids the cascading re-render.
+  const [lastPathname, setLastPathname] = useState(pathname);
+  if (lastPathname !== pathname) {
+    setLastPathname(pathname);
     setOpen(false);
-  }, [pathname]);
+  }
 
   // Lock body scroll while the full-screen menu is open.
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";
     return () => {
       document.body.style.overflow = "";
+    };
+  }, [open]);
+
+  // Keyboard support while the menu is open: Escape closes it, focus moves
+  // into the menu on open and back to the toggle on close.
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setOpen(false);
+    };
+    document.addEventListener("keydown", onKey);
+    // Snapshot the toggle now — the ref may be null again by cleanup time.
+    const toggle = toggleRef.current;
+    menuRef.current?.querySelector<HTMLElement>("a, button")?.focus();
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      toggle?.focus();
     };
   }, [open]);
 
@@ -89,6 +113,7 @@ export function Navbar() {
 
           {/* Mobile toggle */}
           <button
+            ref={toggleRef}
             type="button"
             onClick={() => setOpen((v) => !v)}
             aria-expanded={open}
@@ -104,6 +129,7 @@ export function Navbar() {
       {/* Mobile full-screen menu */}
       <div
         id="mobile-menu"
+        ref={menuRef}
         hidden={!open}
         className="md:hidden"
       >
@@ -113,8 +139,11 @@ export function Navbar() {
               const active = pathname === link.href;
               return (
                 <li key={link.href} style={{ animationDelay: `${i * 60}ms` }}>
+                  {/* Close the menu on navigation — the tap that navigates is
+                      also the tap that dismisses the overlay. */}
                   <Link
                     href={link.href}
+                    onClick={() => setOpen(false)}
                     aria-current={active ? "page" : undefined}
                     className={cn(
                       "block py-3 font-heading text-3xl font-light tracking-[-0.01em] transition-colors",
@@ -127,7 +156,11 @@ export function Navbar() {
               );
             })}
           </ul>
-          <Link href="/contact" className="btn-primary mt-10 w-full">
+          <Link
+            href="/contact"
+            onClick={() => setOpen(false)}
+            className="btn-primary mt-10 w-full"
+          >
             Join Orbit Eight
           </Link>
         </div>

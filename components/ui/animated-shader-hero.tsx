@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect } from 'react';
 import Link from 'next/link';
 
 /* -------------------------------------------------------------------------- */
@@ -382,6 +382,11 @@ void main(){gl_Position=position;}`;
         rendererRef.current.reset();
       }
     };
+    // Locked component (hero_section.md): the shader classes and the mount-once
+    // setup live in this hook's scope, so an exhaustive dep array would force a
+    // full teardown/rebuild of the WebGL context on every render. Intentionally
+    // runs once, as supplied.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return canvasRef;

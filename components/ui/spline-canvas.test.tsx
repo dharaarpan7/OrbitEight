@@ -20,9 +20,16 @@ import { SplineCanvas } from "./spline-canvas";
 const loadMock = vi.fn().mockResolvedValue(undefined);
 const disposeMock = vi.fn();
 const setGlobalEventsMock = vi.fn();
+// The shape the mock Application gives its instances — what the component
+// actually touches on the runtime's Application object.
+interface MockApplication {
+  load: typeof loadMock;
+  dispose: typeof disposeMock;
+  setGlobalEvents: typeof setGlobalEventsMock;
+}
 // A class-style mock: `new Application(...)` must work, so use a
 // constructable function rather than a plain object factory.
-const Application = vi.fn(function (this: any) {
+const Application = vi.fn(function (this: MockApplication) {
   this.load = loadMock;
   this.dispose = disposeMock;
   this.setGlobalEvents = setGlobalEventsMock;
@@ -125,6 +132,10 @@ describe("SplineCanvas", () => {
         new URLSearchParams("").get("bundles"), // shimmed default
         new URLSearchParams("?bundles=rerecord").get("bundles"), // real param wins
         new URLSearchParams("?x=1").get("x"), // other keys untouched
+        // An instance NOT built from window.location.search keeps native
+        // behavior — the shim must not leak into unrelated param reads
+        // (router queries, other components) during the load window.
+        new URLSearchParams("?x=1").get("bundles"),
       );
     });
 
@@ -134,7 +145,7 @@ describe("SplineCanvas", () => {
     render(<SplineCanvas scene={SCENE} />);
 
     await waitFor(() => {
-      expect(observed).toEqual(["off", "rerecord", "1"]);
+      expect(observed).toEqual(["off", "rerecord", "1", null]);
     });
   });
 

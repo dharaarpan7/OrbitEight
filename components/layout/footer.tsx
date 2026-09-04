@@ -62,22 +62,12 @@ export function Footer() {
         </div>
 
         {/* Legal */}
-        <div className="mt-14 flex flex-col gap-4 border-t border-ash/60 pt-6 text-xs text-tertiary sm:flex-row sm:items-center sm:justify-between">
+        {/* Legal — privacy/terms pages don't exist yet; dead links would be
+            worse than none, so only the copyright stands until they do. */}
+        <div className="mt-14 border-t border-ash/60 pt-6 text-xs text-tertiary">
           <p>
             © {new Date().getFullYear()} Orbit Eight. All rights reserved.
           </p>
-          <ul className="flex gap-6">
-            <li>
-              <a href="#" className="transition-colors hover:text-secondary">
-                Privacy
-              </a>
-            </li>
-            <li>
-              <a href="#" className="transition-colors hover:text-secondary">
-                Terms
-              </a>
-            </li>
-          </ul>
         </div>
       </div>
     </footer>

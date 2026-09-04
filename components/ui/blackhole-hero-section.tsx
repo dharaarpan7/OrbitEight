@@ -660,12 +660,18 @@ export function BlackHoleHeroSection({
     midColor, coolColor, starBrightness, glow, exposure, vignette, steps,
     resolution, maxDpr, focus, scrim, scrimStrength, paused,
   });
-  props.current = {
-    distance, elevation, azimuth, orbitSpeed, roll, fov, diskInner, diskOuter,
-    diskThickness, diskDensity, brightness, spinSpeed, grain, doppler, hotColor,
-    midColor, coolColor, starBrightness, glow, exposure, vignette, steps,
-    resolution, maxDpr, focus, scrim, scrimStrength, paused,
-  };
+  // Latest props for the render loop, updated after each render — writing the
+  // ref during render itself is unsafe under React's concurrent rendering
+  // rules (react-hooks/refs); the loop reads it at rAF time, so a post-render
+  // update is equivalent.
+  useEffect(() => {
+    props.current = {
+      distance, elevation, azimuth, orbitSpeed, roll, fov, diskInner, diskOuter,
+      diskThickness, diskDensity, brightness, spinSpeed, grain, doppler, hotColor,
+      midColor, coolColor, starBrightness, glow, exposure, vignette, steps,
+      resolution, maxDpr, focus, scrim, scrimStrength, paused,
+    };
+  });
 
   useEffect(() => {
     const host = hostRef.current;
@@ -968,9 +974,9 @@ export function BlackHoleHeroSection({
       let rx = fz, ry = 0, rz = -fx;          // cross(fwd, worldUp), worldUp = +y
       const rl = Math.hypot(rx, ry, rz) || 1;
       rx /= rl; ry /= rl; rz /= rl;
-      let ux = ry * fz - rz * fy;
-      let uy = rz * fx - rx * fz;
-      let uz = rx * fy - ry * fx;
+      const ux = ry * fz - rz * fy;
+      const uy = rz * fx - rx * fz;
+      const uz = rx * fy - ry * fx;
       const cr = Math.cos(C.roll * RAD);
       const sr = Math.sin(C.roll * RAD);
       const RX = rx * cr + ux * sr, RY = ry * cr + uy * sr, RZ = rz * cr + uz * sr;

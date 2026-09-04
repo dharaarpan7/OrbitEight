@@ -102,9 +102,25 @@ const TestimonialCard: React.FC<TestimonialCardProps> = ({
 }) => {
   const isCenter = position === 0;
 
+  // The div is clickable (tap a card to bring it to the center), so it must
+  // also be keyboard-reachable: a button role, a tab stop on the cards a
+  // keyboard user can meaningfully act on (center and its neighbors), and
+  // Enter/Space firing the same move. Offset cards further out stay out of
+  // the tab order — they are one click away once any card moves.
+  const focusable = Math.abs(position) <= 1;
+
   return (
     <div
       onClick={() => handleMove(position)}
+      role="button"
+      tabIndex={focusable ? 0 : -1}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          handleMove(position);
+        }
+      }}
+      aria-label={`${testimonial.by}: ${testimonial.testimonial}`}
       className={cn(
         "absolute left-1/2 top-1/2 cursor-pointer border-2 p-8 transition-all duration-500 ease-in-out",
         isCenter
@@ -145,7 +161,7 @@ const TestimonialCard: React.FC<TestimonialCardProps> = ({
         "text-base sm:text-xl font-medium",
         isCenter ? "text-primary-foreground" : "text-foreground"
       )}>
-        "{testimonial.testimonial}"
+        &ldquo;{testimonial.testimonial}&rdquo;
       </h3>
       <p className={cn(
         "absolute bottom-8 left-8 right-8 mt-2 text-sm italic",

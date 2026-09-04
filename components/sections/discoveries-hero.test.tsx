@@ -14,7 +14,7 @@ describe("DiscoveriesHero", () => {
 
     expect(screen.getByText("The record")).toBeInTheDocument();
     expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(
-      "Discover what's beyond."
+      "Discover what’s beyond."
     );
     expect(
       screen.getByText("The universe is constantly revealing something new.")

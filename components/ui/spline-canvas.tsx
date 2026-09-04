@@ -65,13 +65,24 @@ export function SplineCanvas({
     let app: Application | undefined;
 
     // Scoped shim that answers `bundles=off` for the runtime's renderer-init
-    // URL-param lookup (see header). Non-`bundles` keys and a real `?bundles=`
-    // param pass through untouched; the prototype is restored the moment the
-    // scene load settles (or the component goes away first).
+    // URL-param lookup (see header). The read happens inside an awaited method
+    // during `app.load` (runtime.js: `await import("./runtime-webgpu-…")` then
+    // `new URLSearchParams(window.location.search).get("bundles")`), so the
+    // shim must span the load — instead of narrowing the time window, it
+    // narrows the victims: it only answers instances that were built from
+    // `window.location.search`, leaving every other URLSearchParams on the
+    // page (router param reads, other components) on native behavior. A real
+    // `?bundles=` param still passes through (`real !== null`), and the
+    // prototype is restored the moment the scene load settles (or the
+    // component goes away first).
     const originalGet = URLSearchParams.prototype.get;
     const shim = function (this: URLSearchParams, key: string) {
       const real = originalGet.call(this, key);
-      return key === "bundles" && real === null ? "off" : real;
+      return key === "bundles" &&
+        real === null &&
+        this.toString() === window.location.search.slice(1)
+        ? "off"
+        : real;
     } as URLSearchParams["get"];
     const unshim = () => {
       if (URLSearchParams.prototype.get === shim) {

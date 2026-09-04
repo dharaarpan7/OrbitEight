@@ -17,7 +17,7 @@ describe("Discoveries page (redesigned)", () => {
   it("opens with the cinematic hero copy", () => {
     render(<DiscoveriesPage />);
 
-    expect(screen.getByText("Discover what's beyond.")).toBeInTheDocument();
+    expect(screen.getByText("Discover what’s beyond.")).toBeInTheDocument();
     expect(screen.getByText("Read the record")).toBeInTheDocument();
   });
 

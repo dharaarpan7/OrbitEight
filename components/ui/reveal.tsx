@@ -1,12 +1,16 @@
 "use client";
 
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { useEffect, useRef, type ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
 /**
  * Scroll reveal — websitePrompt.md "Animation": gentle opacity and small
  * translation only. Respects prefers-reduced-motion (CSS handles the motion
  * removal; this component simply stops observing).
+ *
+ * The reveal is a pure DOM effect, not React state: the effect flips the
+ * `data-visible` attribute the CSS keys on. No state means no extra render
+ * per revealed element and no cascading setState-in-effect.
  */
 export function Reveal({
   children,
@@ -21,7 +25,6 @@ export function Reveal({
   as?: "div" | "section" | "article" | "li" | "span";
 }) {
   const ref = useRef<HTMLElement | null>(null);
-  const [visible, setVisible] = useState(false);
 
   useEffect(() => {
     const el = ref.current;
@@ -31,14 +34,14 @@ export function Reveal({
       typeof window.matchMedia === "function" &&
       window.matchMedia("(prefers-reduced-motion: reduce)").matches
     ) {
-      setVisible(true);
+      el.dataset.visible = "true";
       return;
     }
 
     const io = new IntersectionObserver(
       (entries) => {
         if (entries[0]?.isIntersecting) {
-          setVisible(true);
+          el.dataset.visible = "true";
           io.disconnect();
         }
       },
@@ -52,7 +55,6 @@ export function Reveal({
     <Tag
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       ref={ref as any}
-      data-visible={visible}
       style={delay ? { transitionDelay: `${delay}ms` } : undefined}
       className={cn("reveal", className)}
     >
