@@ -10,6 +10,9 @@
  * Run standalone to sanity-check: echo '{"tool_input":{"file_path":".env"}}' | node .claude/hooks/block-env-access.mjs
  */
 
+import { realpathSync } from "node:fs";
+import { fileURLToPath } from "node:url";
+
 /** Filename patterns that never belong in an agent conversation. */
 const SENSITIVE_PATTERNS = [
   // .env, .env.local, .env.production — at start of path or after a separator.
@@ -64,8 +67,6 @@ async function main() {
 }
 
 // Run only when executed directly, not when imported by the tests.
-import { realpathSync } from "node:fs";
-import { fileURLToPath } from "node:url";
 if (process.argv[1] && realpathSync(process.argv[1]) === realpathSync(fileURLToPath(import.meta.url))) {
   main();
 }
