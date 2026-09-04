@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { execSync } from "node:child_process";
+import { execSync, spawnSync } from "node:child_process";
 import { existsSync, readFileSync, statSync } from "node:fs";
 import { userInfo } from "node:os";
 import { fileURLToPath, pathToFileURL } from "node:url";
@@ -23,6 +23,7 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const claudeMd = path.join(root, "CLAUDE.md");
 const projectSettingsPath = path.join(root, ".claude", "settings.json");
 const localSettingsPath = path.join(root, ".claude", "settings.local.json");
+const hookCliPath = path.join(root, ".claude", "hooks", "block-env-access.mjs");
 
 /* --- Finding 1: CLAUDE.md is owner-writable only ------------------------ */
 
@@ -137,5 +138,32 @@ describe("AgentShield finding 4: a PreToolUse hook blocks sensitive-file access"
     expect(isSensitivePath("components/env-card.tsx")).toBe(false); // "env" in a name is not .env
     expect(isSensitivePath(".env-card.tsx")).toBe(false); // dotfile prefix must match exactly
     expect(isSensitivePath("deploy/terraform.tfkey")).toBe(false); // .tfkey is not .key — no overreach
+  });
+
+  /** Run the hook exactly as Claude Code would: node script, JSON on stdin. */
+  function runHook(stdinText) {
+    return spawnSync(process.execPath, [hookCliPath], {
+      input: stdinText,
+      encoding: "utf8",
+    });
+  }
+
+  it("exits 2 with a stderr message when the tool targets a sensitive file", () => {
+    const result = runHook(
+      JSON.stringify({ tool_name: "Read", tool_input: { file_path: ".env.local" } })
+    );
+    expect(result.status).toBe(2);
+    expect(result.stderr).toMatch(/Blocked/);
+  });
+
+  it("exits 0 for normal files and fails open on unparseable stdin", () => {
+    const allowed = runHook(
+      JSON.stringify({ tool_name: "Edit", tool_input: { file_path: "lib/site.ts" } })
+    );
+    expect(allowed.status).toBe(0);
+    expect(allowed.stderr).toBe("");
+
+    const unparseable = runHook("this is not json");
+    expect(unparseable.status).toBe(0);
   });
 });
