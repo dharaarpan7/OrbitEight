@@ -23,6 +23,11 @@ yarn-error.log*
 # test coverage
 /coverage
 
+# e2e — playwright artifacts
+/test-results/
+/playwright-report/
+/playwright-results.json
+
 # env files
 .env*.local
 .env
