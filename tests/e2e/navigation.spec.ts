@@ -90,11 +90,14 @@ test("brand link returns home from any page", async ({ page }) => {
   await expect(page).toHaveURL(/^(https?:\/\/[^/]+)?\/?$/);
 });
 
-test("footer nav links work", async ({ page }) => {
+test("footer stays quiet — no duplicate navigation block", async ({ page }) => {
   await page.goto("/");
   const footer = page.locator("footer");
-  await footer.getByRole("link", { name: "Discoveries" }).click();
-  await expect(page).toHaveURL(/\/discoveries/);
+  await expect(footer).toBeVisible();
+  // Page navigation lives in the navbar alone; the footer keeps only
+  // brand, socials, contact, and legal.
+  await expect(footer.getByRole("navigation")).toHaveCount(0);
+  await expect(footer.getByRole("link", { name: /protonmail/i })).toBeVisible();
 });
 
 test("unknown paths land on the styled 404", async ({ page }) => {

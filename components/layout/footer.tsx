@@ -1,9 +1,10 @@
-import Link from "next/link";
-import { navLinks, site } from "@/lib/site";
+import { site } from "@/lib/site";
 
 /**
  * Shared footer — websitePrompt.md "Footer".
- * Extremely minimal: brand, short statement, navigation, socials, legal.
+ * Extremely minimal: brand, short statement, socials, contact, legal.
+ * No navigation block — page links live in the navbar alone, so the
+ * bottom of the page stays quiet.
  */
 export function Footer() {
   return (
@@ -19,22 +20,6 @@ export function Footer() {
               {site.tagline}
             </p>
           </div>
-
-          {/* Navigation */}
-          <nav aria-label="Footer">
-            <ul className="grid grid-cols-2 gap-x-12 gap-y-3 sm:grid-cols-3">
-              {navLinks.map((link) => (
-                <li key={link.href}>
-                  <Link
-                    href={link.href}
-                    className="text-sm text-secondary transition-colors hover:text-white"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </nav>
 
           {/* Socials + contact */}
           <div className="space-y-3">
