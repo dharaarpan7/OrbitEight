@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter, Playfair_Display } from "next/font/google";
 import { Navbar } from "@/components/navigation/navbar";
 import { Footer } from "@/components/layout/footer";
+import { site } from "@/lib/site";
 import "./globals.css";
 
 const inter = Inter({
@@ -19,7 +20,7 @@ const playfair = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://orbiteight.example.com"),
+  metadataBase: new URL(site.url),
   title: {
     default: "Orbit Eight — Explore Beyond the Known",
     template: "%s",

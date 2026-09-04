@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useSyncExternalStore, useState, type FormEvent } from "react";
 import { Check, Loader2 } from "lucide-react";
 import { site } from "@/lib/site";
 
@@ -8,8 +8,8 @@ import { site } from "@/lib/site";
  * Contact form — websitePrompt.md "PAGE 5 — CONTACT". Premium and inviting,
  * with inquiry categories (General / Community / Partnership / Media /
  * Collaboration / Support), inline validation, and success/error states.
- * Submission is front-end only for now: inquiries route to the placeholder
- * email in lib/site.ts until a real endpoint is configured.
+ * Submission POSTs the form fields to the Formspree endpoint in lib/site.ts
+ * (which forwards to the inbox); Formspree accepts FormData directly.
  */
 
 const INQUIRY_CATEGORIES = [
@@ -26,34 +26,72 @@ const inputClasses =
 
 type Status = "idle" | "submitting" | "success" | "error";
 
+/** Why a submission failed — drives the alert copy so the reader gets a
+    specific message instead of a generic shrug. */
+type ErrorKind = "fields" | "email" | "network";
+
+/** Loose but honest: something@something.something, no spaces. */
+const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+/** Never-firing subscription for the hydration probe below. */
+const emptySubscribe = () => () => {};
+
 export function ContactForm() {
   const [status, setStatus] = useState<Status>("idle");
+  const [errorKind, setErrorKind] = useState<ErrorKind>("fields");
   const [category, setCategory] = useState<string>("General");
+  // A click before React hydrates would trigger the browser's native form
+  // submit — a page reload that loses everything the visitor typed. The
+  // button stays disabled until hydration attaches the real handler.
+  // useSyncExternalStore probes it without an effect: the server snapshot
+  // says false, the client snapshot says true, and React flips the value
+  // right after hydration.
+  const hydrated = useSyncExternalStore(
+    emptySubscribe,
+    () => true,
+    () => false,
+  );
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const form = event.currentTarget;
     const data = new FormData(form);
 
-    // Validate the essentials inline — quiet, on-brand.
+    // Validate the essentials inline — quiet, on-brand. noValidate disables
+    // the browser's type="email" check, so the format is verified here.
     const name = String(data.get("name") ?? "").trim();
     const email = String(data.get("email") ?? "").trim();
     const message = String(data.get("message") ?? "").trim();
     if (!name || !email || !message) {
+      setErrorKind("fields");
+      setStatus("error");
+      return;
+    }
+    if (!EMAIL_PATTERN.test(email)) {
+      setErrorKind("email");
       setStatus("error");
       return;
     }
 
     setStatus("submitting");
     try {
-      // Placeholder routing — replace with a real endpoint later.
-      // The payload (name, email, category, message) maps 1:1 to whatever
-      // the eventual form service expects.
-      await new Promise((resolve) => setTimeout(resolve, 900));
+      const response = await fetch(site.contactFormEndpoint, {
+        method: "POST",
+        body: data,
+        headers: { Accept: "application/json" },
+      });
+      // Formspree returns 200/201 on success and 4xx/5xx (or an error JSON
+      // with an "errors" field) when the submission is rejected — surface
+      // the error state either way rather than reporting a false success.
+      if (!response.ok) {
+        setErrorKind("network");
+        throw new Error(`Formspree responded with ${response.status}`);
+      }
       setStatus("success");
       form.reset();
       setCategory("General");
     } catch {
+      setErrorKind("network");
       setStatus("error");
     }
   }
@@ -118,6 +156,9 @@ export function ContactForm() {
         </div>
       </fieldset>
 
+      {/* Inquiry category (buttons above) travels with the submission. */}
+      <input type="hidden" name="category" value={category} />
+
       {/* Name + email */}
       <div className="mt-8 grid gap-5 sm:grid-cols-2">
         <div>
@@ -176,16 +217,20 @@ export function ContactForm() {
 
       {status === "error" && (
         <p role="alert" className="mt-5 text-sm text-solar-flare">
-          Something didn’t send — please make sure every field is filled in
-          and try again.
+          {errorKind === "email"
+            ? "That email address doesn’t look right — please check it and try again."
+            : errorKind === "network"
+              ? "Something didn’t send on our end — please try again in a moment."
+              : "Something didn’t send — please make sure every field is filled in and try again."}
         </p>
       )}
 
-      <div className="mt-8 flex flex-wrap items-center justify-between gap-4">
-        <p className="text-xs text-tertiary">
-          Routed to {site.email}
-        </p>
-        <button type="submit" className="btn-primary" disabled={status === "submitting"}>
+      <div className="mt-8 flex flex-wrap items-center justify-end gap-4">
+        <button
+          type="submit"
+          className="btn-primary"
+          disabled={!hydrated || status === "submitting"}
+        >
           {status === "submitting" ? (
             <>
               <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />

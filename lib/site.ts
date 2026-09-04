@@ -2,11 +2,16 @@
 
 export const site = {
   name: "Orbit Eight",
+  /** Canonical origin — OpenGraph/canonical URLs resolve against it. */
+  url: "https://orbiteight.vercel.app",
   tagline: "A place for people who look beyond Earth.",
   description:
     "Orbit Eight is a space enthusiast community for those who never stopped looking up. Astronomy, astrophotography, discoveries, and the universe beyond.",
-  /** Placeholder until a real address is configured. */
-  email: "contact@orbiteight.example.com",
+  /** The inbox the Formspree endpoint forwards contact submissions to. */
+  email: "dharaarpan7@protonmail.com",
+  /** Contact form endpoint — Formspree. The dashboard forwards submissions
+      to the inbox; the form POSTs FormData directly (see ContactForm). */
+  contactFormEndpoint: "https://formspree.io/f/xkjnzobz",
   socials: [
     { label: "X", href: "https://x.com" },
     { label: "Instagram", href: "https://instagram.com" },
