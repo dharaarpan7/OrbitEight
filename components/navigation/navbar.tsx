@@ -126,31 +126,60 @@ export function Navbar() {
         </div>
       </nav>
 
-      {/* Mobile full-screen menu */}
+      {/* Mobile full-screen menu — one top-anchored group: the links lead,
+          the CTA follows directly beneath them. Nothing is pinned to the
+          viewport bottom; a `justify-between` column there read like a
+          footer band instead of navigation. */}
       <div
         id="mobile-menu"
         ref={menuRef}
         hidden={!open}
         className="md:hidden"
       >
-        <div className="flex min-h-[calc(100svh-4rem)] flex-col justify-between bg-void px-6 pb-10 pt-8">
-          <ul className="space-y-2">
+        <div className="flex max-h-[calc(100svh-4rem)] flex-col overflow-y-auto bg-void px-6 pb-10 pt-6">
+          <p className="eyebrow">Menu</p>
+          <ul className="mt-4 divide-y divide-ash/40 border-y border-ash/40">
             {navLinks.map((link, i) => {
               const active = pathname === link.href;
               return (
-                <li key={link.href} style={{ animationDelay: `${i * 60}ms` }}>
+                <li
+                  key={link.href}
+                  className="animate-fade-in-up"
+                  style={{ animationDelay: `${i * 60}ms` }}
+                >
                   {/* Close the menu on navigation — the tap that navigates is
                       also the tap that dismisses the overlay. */}
                   <Link
                     href={link.href}
                     onClick={() => setOpen(false)}
                     aria-current={active ? "page" : undefined}
-                    className={cn(
-                      "block py-3 font-heading text-3xl font-light tracking-[-0.01em] transition-colors",
-                      active ? "text-white" : "text-secondary hover:text-white"
-                    )}
+                    className="group flex items-center gap-5 py-4"
                   >
-                    {link.label}
+                    <span
+                      aria-hidden="true"
+                      className={cn(
+                        "w-6 text-xs tabular-nums tracking-[0.15em] transition-colors",
+                        active
+                          ? "text-solar-flare"
+                          : "text-tertiary group-hover:text-solar-flare/70"
+                      )}
+                    >
+                      {String(i + 1).padStart(2, "0")}
+                    </span>
+                    <span
+                      className={cn(
+                        "font-heading text-3xl font-light tracking-[-0.01em] transition-colors",
+                        active ? "text-white" : "text-secondary group-hover:text-white"
+                      )}
+                    >
+                      {link.label}
+                    </span>
+                    {active && (
+                      <span
+                        aria-hidden="true"
+                        className="ml-auto h-px w-8 self-center bg-solar-flare"
+                      />
+                    )}
                   </Link>
                 </li>
               );
@@ -159,7 +188,7 @@ export function Navbar() {
           <Link
             href="/contact"
             onClick={() => setOpen(false)}
-            className="btn-primary mt-10 w-full"
+            className="btn-primary mt-8 w-full"
           >
             Join Orbit Eight
           </Link>
