@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu, X } from "lucide-react";
+import { ArrowUpRight, Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { navLinks } from "@/lib/site";
 
@@ -129,69 +129,97 @@ export function Navbar() {
       {/* Mobile full-screen menu — one top-anchored group: the links lead,
           the CTA follows directly beneath them. Nothing is pinned to the
           viewport bottom; a `justify-between` column there read like a
-          footer band instead of navigation. */}
+          footer band instead of navigation. The warm aura and ghost
+          wordmark give the void depth without pulling focus. */}
       <div
         id="mobile-menu"
         ref={menuRef}
         hidden={!open}
         className="md:hidden"
       >
-        <div className="flex max-h-[calc(100svh-4rem)] flex-col overflow-y-auto bg-void px-6 pb-10 pt-6">
-          <p className="eyebrow">Menu</p>
-          <ul className="mt-4 divide-y divide-ash/40 border-y border-ash/40">
-            {navLinks.map((link, i) => {
-              const active = pathname === link.href;
-              return (
-                <li
-                  key={link.href}
-                  className="animate-fade-in-up"
-                  style={{ animationDelay: `${i * 60}ms` }}
-                >
-                  {/* Close the menu on navigation — the tap that navigates is
-                      also the tap that dismisses the overlay. */}
-                  <Link
-                    href={link.href}
-                    onClick={() => setOpen(false)}
-                    aria-current={active ? "page" : undefined}
-                    className="group flex items-center gap-5 py-4"
+        <div className="relative max-h-[calc(100svh-4rem)] overflow-hidden bg-void">
+          <div
+            aria-hidden="true"
+            className="menu-aura pointer-events-none absolute inset-0"
+          />
+          <span
+            aria-hidden="true"
+            className="pointer-events-none absolute -bottom-10 -right-3 select-none font-heading text-[11rem] font-light leading-none tracking-[-0.04em] text-white/[0.04]"
+          >
+            Orbit
+          </span>
+          {/* The decorative layer clips the overhanging wordmark; this
+              inner layer carries the vertical scroll instead, so the
+              overflow never turns into a horizontal scrollbar. */}
+          <div className="relative max-h-[calc(100svh-4rem)] overflow-y-auto px-6 pb-10 pt-6">
+            <div className="animate-fade-in-down">
+            <div className="flex items-baseline justify-between gap-4">
+              <p className="eyebrow">Menu</p>
+              <p className="text-[0.6875rem] uppercase tracking-[0.25em] text-tertiary">
+                Explore beyond the known
+              </p>
+            </div>
+            <ul className="mt-5 divide-y divide-ash/40 border-y border-ash/40">
+              {navLinks.map((link, i) => {
+                const active = pathname === link.href;
+                return (
+                  <li
+                    key={link.href}
+                    className="animate-fade-in-up"
+                    style={{ animationDelay: `${i * 60}ms` }}
                   >
-                    <span
-                      aria-hidden="true"
-                      className={cn(
-                        "w-6 text-xs tabular-nums tracking-[0.15em] transition-colors",
-                        active
-                          ? "text-solar-flare"
-                          : "text-tertiary group-hover:text-solar-flare/70"
-                      )}
+                    {/* Close the menu on navigation — the tap that navigates is
+                        also the tap that dismisses the overlay. */}
+                    <Link
+                      href={link.href}
+                      onClick={() => setOpen(false)}
+                      aria-current={active ? "page" : undefined}
+                      className="group flex items-center gap-5 py-4"
                     >
-                      {String(i + 1).padStart(2, "0")}
-                    </span>
-                    <span
-                      className={cn(
-                        "font-heading text-3xl font-light tracking-[-0.01em] transition-colors",
-                        active ? "text-white" : "text-secondary group-hover:text-white"
-                      )}
-                    >
-                      {link.label}
-                    </span>
-                    {active && (
                       <span
                         aria-hidden="true"
-                        className="ml-auto h-px w-8 self-center bg-solar-flare"
+                        className={cn(
+                          "w-6 text-xs tabular-nums tracking-[0.15em] transition-colors",
+                          active
+                            ? "text-solar-flare"
+                            : "text-tertiary group-hover:text-solar-flare/70"
+                        )}
+                      >
+                        {String(i + 1).padStart(2, "0")}
+                      </span>
+                      <span
+                        className={cn(
+                          "font-heading text-3xl font-light tracking-[-0.01em] transition-colors",
+                          active ? "text-white" : "text-secondary group-hover:text-white"
+                        )}
+                      >
+                        {link.label}
+                      </span>
+                      <ArrowUpRight
+                        aria-hidden="true"
+                        className={cn(
+                          "ml-auto h-5 w-5 shrink-0 -translate-x-1 opacity-0 transition-all duration-300 group-hover:translate-x-0 group-hover:opacity-70",
+                          active &&
+                            "translate-x-0 text-solar-flare opacity-100"
+                        )}
                       />
-                    )}
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
-          <Link
-            href="/contact"
-            onClick={() => setOpen(false)}
-            className="btn-primary mt-8 w-full"
-          >
-            Join Orbit Eight
-          </Link>
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
+            <Link
+              href="/contact"
+              onClick={() => setOpen(false)}
+              className="btn-primary mt-8 w-full"
+            >
+              Join Orbit Eight
+            </Link>
+            <p className="mt-3 text-center text-xs tracking-[0.05em] text-tertiary">
+              For those who never stopped looking up
+            </p>
+            </div>
+          </div>
         </div>
       </div>
     </header>

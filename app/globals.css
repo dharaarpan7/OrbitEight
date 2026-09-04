@@ -122,6 +122,23 @@
 }
 
 @layer utilities {
+  /* Mobile menu backdrop — a warm solar aura rising from the top-right
+     corner (brand_design_guideline.md §1 glow), giving the overlay depth
+     over the flat void. */
+  .menu-aura {
+    background:
+      radial-gradient(
+        ellipse 75% 45% at 82% 0%,
+        rgba(245, 166, 35, 0.12),
+        transparent 65%
+      ),
+      radial-gradient(
+        ellipse 55% 30% at 0% 100%,
+        rgba(245, 166, 35, 0.05),
+        transparent 60%
+      );
+  }
+
   /* Scroll reveal — applied by <Reveal> component; inert until JS runs */
   .reveal {
     opacity: 0;
