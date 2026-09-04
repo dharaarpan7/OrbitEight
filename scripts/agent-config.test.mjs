@@ -42,11 +42,14 @@ describe("AgentShield finding 1: CLAUDE.md is owner-writable only", () => {
       }
 
       // Every write-capable grant (F/M/W) must be owner or machine admin.
+      // icacls prints "«path» PRINCIPAL:(perms) …" — drop the path so the
+      // parser can't glue it onto the first principal.
+      const aceText = out.replaceAll(claudeMd, "");
       const allowed = new Set(["builtin\\administrators", "nt authority\\system"]);
       const me = userInfo().username.toLowerCase();
       const grantRe = /([A-Za-z0-9 .\-\\]+?):((?:\([A-Z+]{1,4}\))+)/g;
       const violations = [];
-      for (const m of out.matchAll(grantRe)) {
+      for (const m of aceText.matchAll(grantRe)) {
         const principal = m[1].trim().toLowerCase();
         const grants = m[2];
         if (!/[FMW]/.test(grants)) continue; // read-only is fine

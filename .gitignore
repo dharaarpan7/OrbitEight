@@ -30,4 +30,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
-.claude/
+# agent config — keep personal/local artifacts out, but share the project's
+# security settings and hooks (deny list, PreToolUse guard)
+.claude/*
+!.claude/settings.json
+!.claude/hooks
+!.claude/hooks/*
