@@ -55,10 +55,14 @@ function setMutedPref(next: boolean) {
 /**
  * Background music for the home and about pages. Browsers block audible
  * autoplay until the visitor has interacted with the page, so the component
- * attempts `play()` on route entry and, if rejected, starts on the first
- * pointer/key interaction. A small toggle (bottom-right) mutes or unmutes;
- * the choice persists for the session. Navigating to any other route pauses
- * the track and rewinds it, so the motif restarts on re-entry.
+ * attempts an unmuted `play()` on route entry — this succeeds on every load
+ * after the visitor's first-ever interaction with the site. When it is
+ * rejected (a genuine first visit), the track starts muted right away —
+ * muted autoplay is always allowed — and unmutes the moment the visitor
+ * touches the page, so playback never has to "catch up" from a click. A
+ * small toggle (bottom-right) mutes or unmutes; the choice persists for the
+ * session. Navigating to any other route pauses the track and rewinds it,
+ * so the motif restarts on re-entry.
  */
 export function AmbientAudio() {
   const pathname = usePathname();
@@ -89,20 +93,31 @@ export function AmbientAudio() {
     }
 
     let cancelled = false;
-    const interact = () => {
-      if (!cancelled) audio.play().catch(() => {});
+    // Unmuting outside a user-activation event is itself blocked by
+    // autoplay policy, so this must run from pointerdown/keydown —
+    // scroll and mouse-move don't grant activation.
+    const activate = () => {
+      if (cancelled) return;
+      audio.muted = false;
+      if (audio.paused) audio.play().catch(() => {});
     };
 
     audio.play().catch(() => {
-      // Autoplay blocked — begin on the visitor's first interaction.
-      window.addEventListener("pointerdown", interact, { once: true });
-      window.addEventListener("keydown", interact, { once: true });
+      // First-ever visit: audible autoplay is blocked. Start muted
+      // immediately (always allowed), so the track is already rolling —
+      // the instant the visitor touches the page, sound begins, with no
+      // start-up delay to wait through.
+      audio.muted = true;
+      audio.play().catch(() => {});
+      window.addEventListener("pointerdown", activate, { once: true });
+      window.addEventListener("keydown", activate, { once: true });
     });
 
     return () => {
       cancelled = true;
-      window.removeEventListener("pointerdown", interact);
-      window.removeEventListener("keydown", interact);
+      audio.muted = false;
+      window.removeEventListener("pointerdown", activate);
+      window.removeEventListener("keydown", activate);
     };
   }, [active, muted]);
 

@@ -85,15 +85,20 @@ describe("AmbientAudio", () => {
     expect(toggle).toHaveAttribute("aria-pressed", "true");
   });
 
-  it("starts on the first interaction when autoplay is blocked", async () => {
-    // First attempt rejected — the browser's autoplay policy.
+  it("starts muted when autoplay is blocked, then unmutes on first interaction", async () => {
+    // First (unmuted) attempt rejected — the browser's autoplay policy on
+    // a genuine first visit. The component then starts muted and unmutes
+    // as soon as the visitor touches the page.
     playMock.mockRejectedValueOnce(new DOMException("blocked", "NotAllowedError"));
     mockPathname = "/about";
-    render(<AmbientAudio />);
+    const { container } = render(<AmbientAudio />);
+    const audio = container.querySelector("audio");
 
-    await waitFor(() => expect(playMock).toHaveBeenCalledTimes(1));
-    // The visitor interacts; playback begins.
-    fireEvent.pointerDown(window);
+    // Unmuted attempt, then the muted retry that policy always allows.
     await waitFor(() => expect(playMock).toHaveBeenCalledTimes(2));
+    expect(audio?.muted).toBe(true);
+    // The visitor interacts; sound begins without a second click.
+    fireEvent.pointerDown(window);
+    expect(audio?.muted).toBe(false);
   });
 });
