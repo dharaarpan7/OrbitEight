@@ -48,7 +48,7 @@ export default function RootLayout({
       >
         <Navbar />
         <main id="main">{children}</main>
-        {/* Ambience for the explore and about pages; the component gates
+        {/* Ambience for the home and about pages; the component gates
             itself by route and pauses everywhere else. */}
         <AmbientAudio />
         <Footer />

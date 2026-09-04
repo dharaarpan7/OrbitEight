@@ -28,8 +28,8 @@ afterEach(() => {
 });
 
 describe("AmbientAudio", () => {
-  it("shows the sound toggle and starts playback on /explore", async () => {
-    mockPathname = "/explore";
+  it("shows the sound toggle and starts playback on the homepage", async () => {
+    mockPathname = "/";
     render(<AmbientAudio />);
 
     expect(
@@ -48,20 +48,23 @@ describe("AmbientAudio", () => {
     await waitFor(() => expect(playMock).toHaveBeenCalled());
   });
 
-  it("hides the toggle and pauses the track on other routes", () => {
-    mockPathname = "/discoveries";
-    render(<AmbientAudio />);
+  it.each(["/explore", "/discoveries", "/contact"])(
+    "hides the toggle and pauses the track on %s",
+    (route) => {
+      mockPathname = route;
+      render(<AmbientAudio />);
 
-    expect(
-      screen.queryByRole("button", { name: /ambience/i })
-    ).not.toBeInTheDocument();
-    expect(pauseMock).toHaveBeenCalled();
-    expect(playMock).not.toHaveBeenCalled();
-  });
+      expect(
+        screen.queryByRole("button", { name: /ambience/i })
+      ).not.toBeInTheDocument();
+      expect(pauseMock).toHaveBeenCalled();
+      expect(playMock).not.toHaveBeenCalled();
+    }
+  );
 
   it("does not autoplay when the visitor muted it earlier this session", () => {
     sessionStorage.setItem("orbit-eight:ambience-muted", "1");
-    mockPathname = "/explore";
+    mockPathname = "/about";
     render(<AmbientAudio />);
 
     // The stored preference is read in an effect — flush it.
@@ -72,7 +75,7 @@ describe("AmbientAudio", () => {
   });
 
   it("muting pauses the track and remembers the choice", async () => {
-    mockPathname = "/explore";
+    mockPathname = "/about";
     render(<AmbientAudio />);
     fireEvent.click(screen.getByRole("button", { name: /mute ambience/i }));
 
@@ -85,7 +88,7 @@ describe("AmbientAudio", () => {
   it("starts on the first interaction when autoplay is blocked", async () => {
     // First attempt rejected — the browser's autoplay policy.
     playMock.mockRejectedValueOnce(new DOMException("blocked", "NotAllowedError"));
-    mockPathname = "/explore";
+    mockPathname = "/about";
     render(<AmbientAudio />);
 
     await waitFor(() => expect(playMock).toHaveBeenCalledTimes(1));

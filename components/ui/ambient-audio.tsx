@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { Volume2, VolumeX } from "lucide-react";
 
 /** Routes where the ambience plays. */
-const AUDIO_ROUTES = ["/explore", "/about"];
+const AUDIO_ROUTES = ["/", "/about"];
 const SRC = "/audio/dear-yayoi.mp3";
 /** Quiet enough to sit under browsing, loud enough to be heard. */
 const VOLUME = 0.35;
@@ -53,7 +53,7 @@ function setMutedPref(next: boolean) {
 }
 
 /**
- * Background music for the explore and about pages. Browsers block audible
+ * Background music for the home and about pages. Browsers block audible
  * autoplay until the visitor has interacted with the page, so the component
  * attempts `play()` on route entry and, if rejected, starts on the first
  * pointer/key interaction. A small toggle (bottom-right) mutes or unmutes;
